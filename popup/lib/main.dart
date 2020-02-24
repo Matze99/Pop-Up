@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
+import 'mainScreen.dart';
+//import 'package:flutter/services.dart';
 
 //company popup.com
 //package com.popup.popup
 
 void main() => runApp(MyApp());
 
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+//    SystemChrome.setEnabledSystemUIOverlays([]);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -23,7 +34,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      builder: (context, child){
+        return ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: child,
+        );
+      },
+      home: MainScreen(),
     );
   }
 }
