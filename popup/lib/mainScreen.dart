@@ -1,35 +1,77 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'customDrawer.dart';
+import 'animatedCard.dart';
 
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _listPlaceholderWidget extends StatelessWidget{
-  List<Color> _colors = [Colors.blue.shade50, Colors.blue.shade100, Colors.blue.shade200, Colors.blue.shade300];
+class ListPlaceholderWidget extends StatefulWidget{
   int colorID;
-  _listPlaceholderWidget({this.colorID});
+  ListPlaceholderWidget({this.colorID});
+
+  @override
+  _ListPlaceholderWidgetState createState() => _ListPlaceholderWidgetState();
+}
+
+class _ListPlaceholderWidgetState extends State<ListPlaceholderWidget> {
+  List<Color> _colors = [Colors.blue.shade50, Colors.blue.shade100, Colors.blue.shade200, Colors.blue.shade300];
+  bool visible = true;
+  double height = 100;
 
   @override
   Widget build(BuildContext context) {
+    return AnimatedCard(
+      child: Text('this is a text',
+        style: TextStyle(
+          fontSize: 20,
+        ),),
+      alwaysVisible: false,
+      children: <Widget>[
+        Text('child 1',
+          style: TextStyle(
+            fontSize: 20,
+          ),),
+        Text('child 2',
+          style: TextStyle(
+            fontSize: 20,
+          ),),
+        Text('child 3',
+          style: TextStyle(
+            fontSize: 20,
+          ),),
+      ],
+    );
     return Card(
 //      shape: ,
-      shape:  RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0),
-      ),
+//      shape:  RoundedRectangleBorder(
+//        borderRadius: BorderRadius.circular(0),
+//      ),
       elevation: 5,
       margin: EdgeInsets.fromLTRB(15, 15, 15, 0),
-      color: _colors[colorID],
-      child: Container(
-        height: 100,
-        child: Center(child: Text(
-          'this is a text',
-          style: TextStyle(
-            fontSize: 30,
+      color: _colors[widget.colorID],
+      child: AnimatedContainer(
+        height: height,
+        duration: Duration(seconds: 10),
+        child: GestureDetector(
+          onTap: (){setState(() {
+            this.visible = !this.visible;
+            this.height += 200;
+          });},
+          child: Column(
+            children: <Widget>[
+              Center(child: Text(
+                'this is a text',
+                style: TextStyle(
+                  fontSize: 30,
+                ),
+              )),
+//              this.visible ? Container() : Container(child: Text('stuff'), height: 200,)
+            ],
           ),
-        ))
+        )
       ),
     );
   }
@@ -46,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
     else{
       cID = 6-index%6;
     }
-    return(_listPlaceholderWidget(
+    return(ListPlaceholderWidget(
       colorID: cID,
     ));
   }

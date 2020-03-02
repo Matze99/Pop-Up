@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class _listPlaceholderWidget extends StatelessWidget{
+class DrawerElement extends StatelessWidget{
   List<Color> _colors = [Colors.blue.shade50, Colors.blue.shade100, Colors.blue.shade200, Colors.blue.shade300];
   int colorID;
-  _listPlaceholderWidget({this.colorID});
+  DrawerElement({this.colorID});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class CustomDrawer extends StatelessWidget{
     else{
       cID = 6-index%6;
     }
-    return(_listPlaceholderWidget(
+    return(DrawerElement(
       colorID: cID,
     ));
   }
