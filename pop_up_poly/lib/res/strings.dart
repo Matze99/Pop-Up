@@ -9,10 +9,21 @@ class Strings extends ChangeNotifier{
    *
    */
 
-  Map<String,String> currentStrings;
+  Map<String,String> currentStrings = {
 
-  Strings(){
+  };
 
+  Strings(Map<String, String> strings){
+    currentStrings = Storage.loadSystemLanguageStrings();
+  }
+
+  String get(String identifier){
+    return currentStrings[identifier];
+  }
+
+  void changeLanguage(String newLanguage){
+    currentStrings = Storage.changeLanguage(newLanguage);
+    notifyListeners();
   }
 
 }
