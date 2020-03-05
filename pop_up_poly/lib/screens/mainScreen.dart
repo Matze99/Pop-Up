@@ -1,151 +1,121 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
+import 'package:provider/provider.dart';
+
+import '../res/ressourceManager.dart';
+import '../res/strings.dart';
+import '../res/user.dart';
+import 'customScaffold/customScaffold.dart';
+import '../smallWidgets/randomOffsetCard.dart';
+import '../smallWidgets/textWidget.dart';
 
 class MainScreen extends StatelessWidget {
-  GlobalKey<ScaffoldState> drawerKey;
 
-  MainScreen({this.drawerKey});
+  MainScreen();
+
+
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Container(
-        color: Colors.black38,
-        child: Stack(
-          children: <Widget>[
-            CustomBody(),
-            CustomPaint(
-              painter: AppBarShadowPainter(),
-              child: Container(),
+    var scaffoldKey = GlobalKey<ScaffoldState>();
+
+    Widget _listBuilder(BuildContext context, int index){
+      var size = MediaQuery.of(context).size;
+      if (index == 0){
+        return Container(
+          height: 10,
+        );
+      }
+      else if (index == 1){
+        return RandomOffsetCard(
+          color: 'tertiary',
+          width: size.width,
+          height: size.height*0.1,
+          child: GestureDetector(
+            onTap: () => scaffoldKey.currentState.openDrawer(),
+            child: Consumer<Strings>(
+              builder: (_, strings, __){
+                return Center(
+                  child: TextWidget(
+                    strings.get('openmenu'),
+                    color: 'tertiary',
+                    textStyle: 'normal',
+                  ),
+                );
+              },
             ),
-            CustomAppBar(
-              drawerKey: drawerKey,
-            ),
-          ],
+          ),
+        );
+      }
+      else if (index == 2){
+        return RandomOffsetCard(
+          color: 'tertiary',
+          width: size.width,
+          height: size.height*0.2,
+          child: ScoreCard(),
+//          color: Colors.white,
+//          ),
+        );
+      }
+      else{
+        return RandomOffsetCard(
+            color: 'tertiary',
+//          color: Colors.white,
+          width: size.width,
+          height: size.height*0.15,
+          child: Consumer<User>(
+            builder: (_, user, __){
+              return user.getComp(index-2).getShortDescription('tertiary');
+            },
+          ),
+        );
+      }
+    }
+
+    return CustomScaffold(
+        scaffoldKey: scaffoldKey,
+        rootID: 0,
+        header: Text('header'),
+        body: GestureDetector(
+          child: Consumer<User>(
+            builder: (_, user,__){
+              return Container(
+                child: ListView.builder(
+                  itemCount: user.getCompLength()+2,
+                  itemBuilder: _listBuilder,
+                ),
+              );
+            },
+          ),
+          onTap: (){print('tapped body');},
         ),
-      ),
-    );
+      );
   }
 }
 
-class CustomBody extends StatelessWidget {
+class ScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double heigth = MediaQuery.of(context).size.height;
-    return ClipPath(
-      clipper: BodyClipper(),
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.white,
-                  Colors.orangeAccent,
-                  Colors.orange,
-                  Colors.deepOrangeAccent
-                ])),
-      ),
-    );
-  }
-}
-
-class CustomAppBar extends StatelessWidget {
-  GlobalKey<ScaffoldState> drawerKey;
-  CustomAppBar({this.drawerKey});
-  @override
-  Widget build(BuildContext context) {
-    double heigth = MediaQuery.of(context).size.height;
-    return ClipPath(
-      clipper: AppBarClipper(),
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.green, Colors.lightGreenAccent, Colors.white])),
-        child: Container(
+    return Consumer2<Strings, User>(
+      builder: (_, strings, user, __){
+        return Container(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: GestureDetector(
-                      onTap:  () => drawerKey.currentState.openDrawer(),
-                      child: Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ),
-                  )
-                ],
+              TextWidget(
+                strings.get('yourscore'),
+                color: 'tertiary',
+                textStyle: 'smaller',
+              ),
+              TextWidget(
+                user.getScore(),
+                color: 'tertiary',
+                textStyle: 'larger',
               )
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
-}
-
-class AppBarClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height * 0.8);
-    path.lineTo(size.width * 0.1, size.height * 0.7);
-    path.lineTo(size.width * 0.2, size.height * 0.2);
-    path.lineTo(size.width * 0.9, size.height * 0.1);
-    path.lineTo(size.width, 0);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-class AppBarShadowPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = Colors.black38;
-
-    Path path = Path();
-    double offset = 5;
-    path.lineTo(0, size.height * 0.8 + 2 * offset);
-    path.lineTo(size.width * 0.1 + offset, size.height * 0.7 + offset);
-    path.lineTo(size.width * 0.2 + offset, size.height * 0.2 + offset);
-    path.lineTo(size.width * 0.9 + offset, size.height * 0.1 + offset);
-    path.lineTo(size.width + offset, 0);
-    path.close();
-//    canvas.drawPath(path, paint);
-    canvas.drawShadow(path, Colors.black38, 0, false);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
-class BodyClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.moveTo(0, size.height * 0.6);
-    path.lineTo(size.width * 0.1, size.height * 0.5);
-    path.lineTo(size.width * 0.2, size.height * 0.2);
-    path.lineTo(size.width * 0.9, size.height * 0.1);
-    path.lineTo(size.width, 0);
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

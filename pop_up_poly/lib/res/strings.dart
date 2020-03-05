@@ -13,11 +13,12 @@ class Strings extends ChangeNotifier{
 
   };
 
-  Strings(Map<String, String> strings){
+  Strings(){
     currentStrings = Storage.loadSystemLanguageStrings();
   }
 
   String get(String identifier){
+    print(currentStrings[identifier]);
     return currentStrings[identifier];
   }
 
