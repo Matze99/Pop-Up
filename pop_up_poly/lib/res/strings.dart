@@ -9,6 +9,17 @@ class Strings extends ChangeNotifier{
    *
    */
 
+  List<String> _languages = ['en', 'de'];
+  String _currentLanguage = 'en';
+
+  List<String> getLanguages(){
+    return _languages;
+  }
+
+  String getCurrentLanguage(){
+    return _currentLanguage;
+  }
+
   Map<String,String> currentStrings = {
 
   };
@@ -18,7 +29,6 @@ class Strings extends ChangeNotifier{
   }
 
   String get(String identifier){
-    print(currentStrings[identifier]);
     return currentStrings[identifier];
   }
 

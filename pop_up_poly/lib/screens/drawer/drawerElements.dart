@@ -7,6 +7,7 @@ import '../mainScreen.dart';
 import '../competitionScreen.dart';
 import 'drawerElement.dart';
 import '../rankingScreen.dart';
+import '../settingsScreen/settingsScreen.dart';
 
 class DrawerElements extends StatelessWidget {
   int rootID;
@@ -35,6 +36,12 @@ class DrawerElements extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => RankingScreen()),
+      );
+    }
+    else if (id == 5){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsScreen()),
       );
     }
     else {
@@ -67,12 +74,17 @@ class DrawerElements extends StatelessWidget {
                             strings.get('oldcomp'),
                             onTab: (){navigate(1, context);},
                           ),
-                          DrawerElementChild(
-                            strings.get('ranking'),
-                            onTab: (){navigate(2, context);},
-                          ),
+//                          DrawerElementChild(
+//                            strings.get('ranking'),
+//                            onTab: (){navigate(2, context);},
+//                          ),
                         ],
                       ),
+                    ),
+                    DrawerElement(
+                      title: strings.get('settings'),
+                      iconData: CupertinoIcons.settings,
+                      onTab: (){navigate(5, context);},
                     )
                   ],
                 ),

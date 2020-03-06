@@ -81,47 +81,53 @@ class DrawerElementHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        GestureDetector(
-          onTap: onTabTitle,
-          child: Row(
-            children: <Widget>[
-              iconData == null
-                  ? Container()
-                  : Icon(
-                      CupertinoIcons.home,
-                      color: colorSheme.getTextColor('tertiary'),
+    return Consumer<Fonts>(
+      builder: (_, fonts, __){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            GestureDetector(
+              onTap: onTabTitle,
+              child: Row(
+                children: <Widget>[
+                  iconData == null
+                      ? Container()
+                      : Icon(
+                    iconData,
+                    color: colorSheme.getTextColor('tertiary'),
+                    size: 20 * (fonts.fontSize/30),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 10,
                     ),
-              Container(
-                padding: EdgeInsets.only(
-                  left: 10,
-                ),
-                child: Container(
-                  padding: EdgeInsets.only(
-                    top: 5,
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        top: 5,
+                      ),
+                      child: TextWidget(
+                        title,
+                        color: 'tertiary',
+                        textStyle: 'drawerTitle',
+                      ),
+                    ),
                   ),
-                  child: TextWidget(
-                    title,
-                    color: 'tertiary',
-                    textStyle: 'drawerTitle',
-                  ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
-        !hasChildren
-            ? Container()
-            : GestureDetector(
-                onTap: onTabIcon,
-                child: Icon(
-                  childrenVisible ? Icons.minimize : CupertinoIcons.add,
-                  color: colorSheme.getTextColor('tertiary'),
-                ),
-              )
-      ],
+            ),
+            !hasChildren
+                ? Container()
+                : GestureDetector(
+              onTap: onTabIcon,
+              child: Icon(
+                childrenVisible ? Icons.minimize : CupertinoIcons.add,
+                color: colorSheme.getTextColor('tertiary'),
+                size: 20 * (fonts.fontSize/30),
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }

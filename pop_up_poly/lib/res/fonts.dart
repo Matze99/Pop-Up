@@ -9,7 +9,37 @@ class Fonts extends ChangeNotifier{
    *
    * the color is not stored here
    */
+  double minFontSize = 5;
   double fontSize = 30;
+  double maxFontSize = 50;
+
+  void increaseFontSize(){
+    if (fontSize == maxFontSize){
+
+    }
+    else if (fontSize + 3 >= maxFontSize){
+      fontSize = maxFontSize;
+      notifyListeners();
+    }
+    else{
+      fontSize += 3;
+      notifyListeners();
+    }
+  }
+
+  void decreaseFontSize(){
+    if (fontSize == minFontSize){
+
+    }
+    else if (fontSize - 3 <= minFontSize){
+      fontSize = maxFontSize;
+      notifyListeners();
+    }
+    else{
+      fontSize -= 3;
+      notifyListeners();
+    }
+  }
 
   TextStyle normal(Color color) {
     return TextStyle(

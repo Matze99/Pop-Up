@@ -6,6 +6,7 @@ import 'package:flutter/painting.dart';
 
 import '../res/colorSchemes.dart';
 import '../smallWidgets/textWidget.dart';
+import '../res/fonts.dart';
 
 class RandomOffsetCard extends StatelessWidget {
   double width;
@@ -17,18 +18,19 @@ class RandomOffsetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ColorShemes>(
-      builder: (_, colorSheme, __) {
+    return Consumer2<ColorShemes, Fonts>(
+      builder: (_, colorSheme, fonts, __) {
+        var scaledHeight = height * (fonts.fontSize/30);
         return Container(
           margin: EdgeInsets.all(15),
           child: CustomPaint(
             painter:
-            RandomOffsetCardBackgroundPainter(colorSheme.getColor(color), width*0.9, height*0.9, 0, 0, width*0.03),//colorSheme.getColor(color)
+            RandomOffsetCardBackgroundPainter(colorSheme.getColor(color), width*0.9, scaledHeight*0.9, 0, 0, width*0.03),//colorSheme.getColor(color)
             child: GestureDetector(
               onTap: (){print('pressed');},
               child: Container(
                 width: width,
-                height: height,
+                height: scaledHeight,
                 child: child == null ? Center(child: TextWidget('random offset card', textStyle: 'normal', color: color,)):child,
               ),
             ),
