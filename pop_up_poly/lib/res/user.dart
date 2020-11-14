@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '../smallWidgets/textWidget.dart';
+import '../res/strings.dart';
 import 'storage.dart';
 
 class User extends ChangeNotifier{
@@ -74,15 +76,24 @@ class _Competition {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              TextWidget(
-                _dateTime.toIso8601String(),
-                color: color,
-                textStyle: 'smaller',
-              )
-            ],
+          Consumer<Strings>(
+            builder: (_, strings, __){
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  TextWidget(
+                    CustomDateTime.extractDate(_dateTime, strings.getCurrentLanguage() == 'en'),
+                    color: color,
+                    textStyle: 'smaller',
+                  ),
+                  TextWidget(
+                    CustomDateTime.extractTime(_dateTime, strings.getCurrentLanguage() == 'en'),
+                    color: color,
+                    textStyle: 'smaller',
+                  )
+                ],
+              );
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -108,6 +119,62 @@ class _Competition {
 
     );
   }
+
+}
+
+class CustomDateTime{
+  static String extractDate(DateTime date, bool american){
+    String day = leadingZero(date.day);
+    String month = leadingZero(date.month);
+    String year = date.year.toString();
+    if (american){
+      return month +'/' + day + '/' + year;
+    }
+    else{
+      return day + '.' + month + '.' + year;
+    }
+  }
+
+  static String extractTime(DateTime date, bool american){
+    String hour;
+    String ext = '';
+    if (american){
+      var s = convertHourToAmerican(date.hour);
+      hour = s[0] +':';
+      ext = ' '+s[1];
+    }
+    else {
+      hour = date.hour.toString() + ':';
+    }
+    String minute = leadingZero(date.minute);
+
+    return hour + minute +ext;
+  }
+
+  static List<String> convertHourToAmerican(int hour){
+
+    if (hour >= 13){
+      return [(hour-12).toString(), 'PM'];
+    }
+    else if (hour == 12){
+      return ['12', 'PM'];
+    }
+    else if (hour == 0){
+      return ['12', 'AM'];
+    }
+    else {
+      return [(hour.toString()), 'AM'];
+    }
+  }
+
+  static String leadingZero(int i){
+    String s = i.toString();
+    if (s.length < 2){
+      s = '0' + s;
+    }
+    return s;
+  }
+
 
 }
 

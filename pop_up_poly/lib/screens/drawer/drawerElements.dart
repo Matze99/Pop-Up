@@ -74,10 +74,10 @@ class DrawerElements extends StatelessWidget {
                             strings.get('oldcomp'),
                             onTab: (){navigate(1, context);},
                           ),
-//                          DrawerElementChild(
-//                            strings.get('ranking'),
-//                            onTab: (){navigate(2, context);},
-//                          ),
+                          DrawerElementChild(
+                            strings.get('ranking'),
+                            onTab: (){navigate(2, context);},
+                          ),
                         ],
                       ),
                     ),

@@ -20,6 +20,12 @@ class Strings extends ChangeNotifier{
     return _currentLanguage;
   }
 
+  void changeLanguage(String newLanguage){
+    _currentLanguage = newLanguage;
+    currentStrings = Storage.changeLanguage(newLanguage);
+    notifyListeners();
+  }
+
   Map<String,String> currentStrings = {
 
   };
@@ -32,9 +38,9 @@ class Strings extends ChangeNotifier{
     return currentStrings[identifier];
   }
 
-  void changeLanguage(String newLanguage){
-    currentStrings = Storage.changeLanguage(newLanguage);
-    notifyListeners();
-  }
+//  void changeLanguage(String newLanguage){
+//    currentStrings = Storage.changeLanguage(newLanguage);
+//    notifyListeners();
+//  }
 
 }

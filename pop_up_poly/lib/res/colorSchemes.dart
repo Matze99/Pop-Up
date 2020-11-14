@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 List<String> inBuildColorShemes = ['dark', 'light', 'lady'];
 
-final Map<String, Color> lady = {
+final Map<String, Color> pinkElegance = {
   'primary': Color(0xfff9858b),
   'secondary': Color(0xffed335f),
   'tertiary': Color(0xff761137),
@@ -12,13 +12,13 @@ final Map<String, Color> lady = {
   'secondtext': Colors.white,
   'tertitext': Colors.white,
 };
-final Map<String, List<Color>> ladyGrad = {
+final Map<String, List<Color>> pinkEleganceGrad = {
   'primary': [Color(0xfff77278), Color(0xfff9858b), Color(0xfffcacb0), Colors.white], //white at the end
   'secondary': [Colors.white, Color(0xffed5377), Color(0xffed335f), Color(0xffe6194a)], //white at the start
   'tertiary': [Color(0xff75042e), Color(0xff761137), Color(0xff78354e), Color(0xff7a5261)],
 };
 
-final Map<String, Color> blueProfession = {
+final Map<String, Color> blueLagoon = {
   'primary': Color(0xfff2bc94),
   'secondary': Color(0xff00145f),
   'tertiary': Color(0xfff4af1b),
@@ -26,13 +26,13 @@ final Map<String, Color> blueProfession = {
   'secondtext': Colors.white,
   'tertitext': Colors.black,
 };
-final Map<String, List<Color>> blueProfessionGrad = {
+final Map<String, List<Color>> blueLagoonGrad = {
   'primary': [Color(0xffeb7c2a), Color(0xffed9b5f), Color(0xfff2bc94), Colors.white], //white at the end
   'secondary': [Colors.white, Color(0xff273363), Color(0xff152563), Color(0xff00145f)], //white at the start
   'tertiary': [Color(0xfff5a700), Color(0xfff4af1b), Color(0xfff5bb40), Color(0xfffad17a)],
 };
 
-final Map<String, Color> funky = {
+final Map<String, Color> funkyRadiant = {
   'primary': Color(0xff283350),
   'secondary': Color(0xfff93800),
   'tertiary': Color(0xffffb500),
@@ -40,13 +40,13 @@ final Map<String, Color> funky = {
   'secondtext': Colors.white,
   'tertitext': Colors.black,
 };
-final Map<String, List<Color>> funkyGrad = {
+final Map<String, List<Color>> funkyRadiantGrad = {
   'primary': [Color(0xff283350), Color(0xff4f5975), Color(0xff707a94), Colors.white], //white at the end
   'secondary': [Colors.white, Color(0xfffa724b), Color(0xfff93800), Color(0xffab2802)], //white at the start
   'tertiary': [Color(0xffa17202), Color(0xffffb500), Color(0xffffc63d), Color(0xfffad989)],
 };
 
-final Map<String, Color> dark = {
+final Map<String, Color> darkMysterium = {
   'primary': Color(0xff3b3a3a),
   'secondary': Color(0xff949494),
   'tertiary': Colors.black,
@@ -54,13 +54,13 @@ final Map<String, Color> dark = {
   'secondtext': Colors.white,
   'tertitext': Colors.white,
 };
-final Map<String, List<Color>> darkGrad = {
+final Map<String, List<Color>> darkMysteriumGrad = {
   'primary': [Color(0xff3b3a3a),Color(0xff949494)],
   'secondary': [Color(0xff949494), Color(0xff3b3a3a)],
   'tertiary': [Color(0xff949494), Colors.black],
 };
 
-final Map<String, Color> light = {
+final Map<String, Color> lightAmbient = {
   'primary': Colors.white,
   'secondary': Colors.black12,
   'tertiary': Colors.white,
@@ -68,7 +68,7 @@ final Map<String, Color> light = {
   'secondtext': Colors.black,
   'tertitext': Colors.black,
 };
-final Map<String, List<Color>> lightGrad = {
+final Map<String, List<Color>> lightAmbientGrad = {
   'primary': [Color(0xffb0b0b0), Colors.white],
   'secondary': [Colors.white,Color(0xffb0b0b0)],
   'tertiary': [Colors.white,Colors.white,Colors.white],
@@ -76,6 +76,21 @@ final Map<String, List<Color>> lightGrad = {
 
 
 class ColorShemes extends ChangeNotifier{
+  final Map<String,Map<String, Color>> _allColors = {
+    'pinkelegance': pinkElegance,
+    'bluelagoon': blueLagoon,
+    'funkyradiant': funkyRadiant,
+    'darkmysterium': darkMysterium,
+    'lightambient': lightAmbient,
+  };
+  final Map<String,Map<String, List<Color>>> _allGrads = {
+    'pinkelegance': pinkEleganceGrad,
+    'bluelagoon': blueLagoonGrad,
+    'funkyradiant': funkyRadiantGrad,
+    'darkmysterium': darkMysteriumGrad,
+    'lightambient': lightAmbientGrad,
+  };
+  
   List<Color> primaryGradient;
   List<Color> secondaryGradient;
   List<Color> tertiaryGradient;
@@ -87,13 +102,26 @@ class ColorShemes extends ChangeNotifier{
   Color primaryTextColor;
   Color secondaryTextColor;
   Color tertiaryTextColor;
+  
+  int currentColorSheme = 0;
+  final List<String> colorShemeNames = ['pinkelegance', 'bluelagoon', 'funkyradiant', 'darkmysterium', 'lightambient'];
 
   ColorShemes(){
-    changeColor(lady, ladyGrad);
+//    _changeColor(pinkElegance, pinkEleganceGrad);
+    _changeColor(_allColors[colorShemeNames[0]], _allGrads[colorShemeNames[0]]);
+  }
+  
+  void changeColor(int colorSheme){
+    _changeColor(_allColors[colorShemeNames[colorSheme]], _allGrads[colorShemeNames[colorSheme]]);
+    currentColorSheme = colorSheme;
+  }
+
+  getColorShemes(){
+    return colorShemeNames;
   }
 
 
-  void changeColor(Map<String, Color> colors, Map<String, List<Color>> gradients) async {
+  void _changeColor(Map<String, Color> colors, Map<String, List<Color>> gradients) async {
     primaryColor = colors['primary'];
     secondaryColor = colors['secondary'];
     tertiaryColor = colors['tertiary'];

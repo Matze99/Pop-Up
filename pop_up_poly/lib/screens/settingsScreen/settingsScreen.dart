@@ -8,7 +8,8 @@ import '../../smallWidgets/randomOffsetCard.dart';
 import '../../res/strings.dart';
 import '../../res/fonts.dart';
 import '../../res/colorSchemes.dart';
-
+import 'languageSelector.dart';
+import 'colorShemeSelector.dart';
 
 class SettingsScreen extends StatelessWidget {
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -77,6 +78,14 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
             ),
+          ),
+          LanguageSelector(
+            height: size.height,
+            width: size.width,
+          ),
+          ColorShemeSelector(
+            height: size.height,
+            width: size.width,
           )
         ],
       ),

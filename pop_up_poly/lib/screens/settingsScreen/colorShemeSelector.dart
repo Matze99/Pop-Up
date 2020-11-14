@@ -5,39 +5,40 @@ import 'package:provider/provider.dart';
 
 import '../../smallWidgets/randomOffsetCard.dart';
 import '../../res/strings.dart';
+import '../../res/colorSchemes.dart';
 
-class LanguageSelector extends StatefulWidget {
+class ColorShemeSelector extends StatefulWidget {
   double width;
   double height;
   bool showSelection = false;
 
-  LanguageSelector({this.height, this.width});
+  ColorShemeSelector({this.height, this.width});
 
   @override
-  _LanguageSelectorState createState() => _LanguageSelectorState();
+  _ColorShemeSelectorState createState() => _ColorShemeSelectorState();
 }
 
-class LanguageSelection extends StatelessWidget {
+class ColorShemeSelection extends StatelessWidget {
   double width;
   double height;
-  String language;
+  int colorShemeName;
 
-  LanguageSelection(this.language, {this.width, this.height});
+  ColorShemeSelection(this.colorShemeName, {this.width, this.height});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<Strings>(
-      builder: (_, strings, __){
+    return Consumer<ColorShemes>(
+      builder: (_, colorSheme, __){
         return RandomOffsetCard(
           color: 'primary',
           width: width * 0.8,
           height: height*0.1,
           child: GestureDetector(
             onTap: (){
-              strings.changeLanguage(language);
-              },
+              colorSheme.changeColor(colorShemeName);
+            },
             child: ITextWidget(
-              language,
+              colorSheme.colorShemeNames[colorShemeName],
               color: 'primary',
             ),
           ),
@@ -48,19 +49,19 @@ class LanguageSelection extends StatelessWidget {
 }
 
 
-class _LanguageSelectorState extends State<LanguageSelector> {
+class _ColorShemeSelectorState extends State<ColorShemeSelector> {
 
 
-  List<Widget> buildLanguageList(Strings strings, double width, double height){
-    List<String> languages = strings.getLanguages();
-    List<Widget> selections = List(languages.length-1);
+  List<Widget> buildLanguageList(ColorShemes colorScheme, double width, double height){
+    List<String> colorShemeNames = colorScheme.getColorShemes();
+    List<Widget> selections = List(colorShemeNames.length-1);
     int j = 0;
-    for (int i = 0; i < languages.length; i ++){
-      if (strings.getCurrentLanguage() == languages[i]){
+    for (int i = 0; i < colorShemeNames.length; i ++){
+      if (colorScheme.currentColorSheme == i){
 
       }
       else {
-        selections[j] = LanguageSelection(languages[i], width: width,height: height,);
+        selections[j] = ColorShemeSelection(i, width: width,height: height,);
         j += 1;
       }
     }
@@ -70,12 +71,12 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<Strings>(
-      builder: (_, strings, __){
+    return Consumer2<Strings, ColorShemes>(
+      builder: (_, strings, colorSheme, __){
         return RandomOffsetCard(
           color: 'tertiary',
           width: widget.width,
-          height: widget.height*0.1 *(widget.showSelection? 1+strings.getLanguages().length: 1),
+          height: widget.height*0.12 *(widget.showSelection? 1+colorSheme.getColorShemes().length: 1),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -86,7 +87,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                   });
                 },
                 child: ITextWidget(
-                  'changelanguage',
+                  'changecolorsheme',
                   color: 'tertiary',
                 ),
               ),
@@ -96,7 +97,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
                 ),
 
                 child: Column(
-                  children: buildLanguageList(strings, widget.width, widget.height),
+                  children: buildLanguageList(colorSheme, widget.width, widget.height),
                 ),
               ) :Container(),
             ],
